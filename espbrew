@@ -1,0 +1,86 @@
+esphome:
+  name: beer3
+  platform: ESP8266
+  board: esp01_1m
+
+wifi:
+  ssid: "yourwifi"
+  password: "yourpassword"
+
+  # Enable fallback hotspot (captive portal) in case wifi connection fails
+  ap:
+    ssid: "Beer3 Fallback Hotspot"
+    password: "Yourbackuppassword"
+
+captive_portal:
+
+# Enable logging
+logger:
+
+# Enable Home Assistant API
+api:
+
+ota:
+
+# Temperatur sensor 
+dallas:
+  - pin: GPIO2
+    update_interval: 1000ms
+  
+status_led:
+  pin:
+    number: GPIO16
+    inverted: yes
+
+sensor:
+  - platform: dallas
+    address: 0x6C03199779387728
+    name: "Temperature 1"
+
+
+  - platform: wifi_signal
+    name: "Heater controll"
+    update_interval: 60s
+
+  - platform: uptime
+    name: "Heater controll uptime"
+
+text_sensor:
+  - platform: version
+    name: "Heater controll ESPHome version"    
+
+switch:
+- platform: gpio
+  pin: GPIO15
+  id: heater_1
+#  inverted: yes
+  
+- platform: gpio
+  pin: GPIO14
+  id: heater_2
+#  inverted: yes
+  
+- platform: template
+  name: "Heaters 50% Power"
+  optimistic: yes
+  id: redtemp
+  turn_on_action:
+  - while:
+      condition:
+        lambda: 'return true;'
+      then:
+      - switch.turn_on: heater_1
+      - switch.turn_on: heater_2
+# Mäskning
+      - delay: 400ms
+#      - delay: 300ms
+      - switch.turn_off: heater_1
+      - switch.turn_off: heater_2
+# Mäskning
+      - delay: 100ms
+#      - delay: 700ms
+  turn_off_action:
+  - switch.turn_on: heater_1
+  - switch.turn_on: heater_2
+  
+  
