@@ -1,26 +1,3 @@
-esphome:
-  name: beer3
-  platform: ESP8266
-  board: esp01_1m
-
-wifi:
-  ssid: "yourwifi"
-  password: "yourpassword"
-
-  # Enable fallback hotspot (captive portal) in case wifi connection fails
-  ap:
-    ssid: "Beer3 Fallback Hotspot"
-    password: "Yourbackuppassword"
-
-captive_portal:
-
-# Enable logging
-logger:
-
-# Enable Home Assistant API
-api:
-
-ota:
 
 # Temperatur sensor 
 dallas:
